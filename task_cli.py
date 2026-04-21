@@ -73,6 +73,34 @@ def update_task(id: int, description):
         print("Tarea actualizada con exito.")
 
 
+def mark_task(id, status):
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    tasks = load_tasks()
+    found = False
+    for task in tasks:
+        if task["id"] == id:
+            task["status"] = status
+            task["updatedAt"] = now
+            found = True
+            break
+    if not found:
+        print("Tarea no encontrada.")
+    else:
+        save_tasks(tasks)
+        print(f"Tarea marcada como {status} con exito.")
+
+
+def list_tasks(status=None):
+    tasks = load_tasks()
+    if not tasks:
+        print("No hay tareas.")
+        return
+
+    for task in tasks:
+        if status is None or task["status"] == status:
+            print(f"[{task['id']}] {task['description']} ({task['status']})")
+
+
 if len(sys.argv) < 2:
     print(f"Uso: python task_cli.py <command>")
     sys.exit(1)
@@ -96,3 +124,16 @@ else:
             print("Por favor, agregue una descripcion.")
         else:
             update_task(int(sys.argv[2]), sys.argv[3])
+    elif command == "mark-in-progress":
+        if len(sys.argv) < 3:
+            print("Por favor, escriba un ID valido.")
+        else:
+            mark_task(int(sys.argv[2]), "in-progress")
+    elif command == "mark-done":
+        if len(sys.argv) < 3:
+            print("Por favor, escriba un ID valido.")
+        else:
+            mark_task(int(sys.argv[2]), "done")
+    elif command == "list":
+        status = sys.argv[2] if len(sys.argv) > 2 else None
+        list_tasks(status)
