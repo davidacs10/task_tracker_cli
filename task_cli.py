@@ -7,8 +7,12 @@ from datetime import datetime
 def load_tasks():
     if os.path.exists("tasks.json"):
         with open("tasks.json", "r") as f:
-            content = json.load(f)
-            return content
+            try:
+                content = json.load(f)
+                return content
+            except json.JSONDecodeError:
+                print("Error: task.json esta corrupto.")
+                sys.exit(1)
     return []
 
 
@@ -149,3 +153,5 @@ else:
     elif command == "list":
         status = sys.argv[2] if len(sys.argv) > 2 else None
         list_tasks(status)
+    else:
+        print("Comando no reconocido.")
