@@ -116,24 +116,36 @@ else:
         if len(sys.argv) < 3:
             print("Por favor, escriba un ID valido.")
         else:
-            delete_task(int(sys.argv[2]))
+            try:
+                delete_task(int(sys.argv[2]))
+            except ValueError:
+                print("El ID debe ser un numero entero.")
     elif command == "update":
         if len(sys.argv) < 3:
             print("Por favor, escriba un ID valido.")
         elif len(sys.argv) < 4:
             print("Por favor, agregue una descripcion.")
         else:
-            update_task(int(sys.argv[2]), sys.argv[3])
+            try:
+                update_task(int(sys.argv[2]), sys.argv[3])
+            except ValueError:
+                print("El ID debe ser un numero entero.")
     elif command == "mark-in-progress":
         if len(sys.argv) < 3:
             print("Por favor, escriba un ID valido.")
         else:
-            mark_task(int(sys.argv[2]), "in-progress")
+            try:
+                mark_task(int(sys.argv[2]), "in-progress")
+            except ValueError:
+                print("El ID debe ser un numero entero.")
     elif command == "mark-done":
         if len(sys.argv) < 3:
             print("Por favor, escriba un ID valido.")
         else:
-            mark_task(int(sys.argv[2]), "done")
+            try:
+                mark_task(int(sys.argv[2]), "done")
+            except ValueError:
+                print("El ID debe ser un numero entero.")
     elif command == "list":
         status = sys.argv[2] if len(sys.argv) > 2 else None
         list_tasks(status)
