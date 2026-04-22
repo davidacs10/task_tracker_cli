@@ -39,5 +39,34 @@ class TestAddTask(unittest.TestCase):
         self.assertEqual(saved_task["status"], "todo")
 
 
+class TestDeleteTask(unittest.TestCase):
+    @patch("task_cli.save_tasks")
+    @patch("task_cli.load_tasks")
+    def test_delete_existent_task(self, mock_load, mock_save):
+        mock_load.return_value = [
+            {
+                "id": 1,
+                "description": "Tarea existente",
+                "status": "todo",
+                "createdAt": "2026-04-20 10:00:00",
+                "updatedAt": "2026-04-20 10:00:00",
+            }
+        ]
+
+        delete_task(1)
+
+        saved_list = mock_save.call_args[0][0]
+        self.assertEqual(saved_list, [])
+
+    @patch("task_cli.save_tasks")
+    @patch("task_cli.load_tasks")
+    def test_delete_nonexistent_task(self, mock_load, mock_save):
+        mock_load.return_value = []
+
+        delete_task(99)
+
+        mock_save.assert_not_called()
+
+
 if __name__ == "__main__":
     unittest.main()
